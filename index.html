@@ -92,7 +92,7 @@
 			<div id="index-right">
 				<div id="right-container">
 					<div class="person-head"></div>
-					<div class="person-name" id="myName">Newest</div>
+					<div class="person-name" id="myName"></div>
 					<div class="person-piece">
 						<img height="20px" style="float: left;" src="pic/review.png">
 						<div class="review" id="myReview">我的评论</div>
@@ -113,21 +113,12 @@
 	
 	<!--
     	作者：731275785@qq.com
-    	时间：2017-07-22
-    	描述：验证登录
-    -->
-	<script>
-		if($.cookie('newestUserId') &&  $.cookie('newestUserPassword')){
-			
-		}
-	</script>
-	
-	<!--
-    	作者：731275785@qq.com
     	时间：2017-07-21
     	描述：全局变量
     -->
     <script>
+    	var u1 = "http://121.48.228.194:4567/post";
+    	var ajaxobj;
     	var list = 
     	'<li class="list-news">' +
     		'<div class="list-news-top">' +
@@ -155,6 +146,65 @@
     		'</div>' +
     	'</li>';
     </script>
+    
+     <script>
+    	function sendPrePost(){
+    		$.ajax({
+    			type:"get",
+    			url:u1,
+    			async:true,
+    			contentType: "application/x-www-form-urlencoded; charset=utf-8",
+ 				success:function(data){
+ 					ajaxobj = JSON.parse(data);
+ 					if(ajaxobj.isOk == true){
+   						appendList(ajaxobj.posts[0].post_id,ajaxobj.posts[0].author_name,
+   						ajaxobj.posts[0].author_id,ajaxobj.posts[0].title,
+   						ajaxobj.posts[0].content,ajaxobj.posts[0].time,
+   						ajaxobj.posts[0].author_pic,ajaxobj.posts[0].liked);
+ 					}
+ 				}
+    		});
+    	}
+    </script>
+    
+    <!--
+    	作者：731275785@qq.com
+    	时间：2017-07-22
+    	描述：验证登录与加载用户数据
+    -->
+	<script>
+		if($.cookie('newestUserId') &&  $.cookie('newestUserName')){
+			$("#myName").html($.cookie('newestUserName'));
+			sendPrePost();
+		}
+		else{
+			window.location.href = "login-register.html";
+		}
+	</script>
+	
+	<!--
+    	作者：731275785@qq.com
+    	时间：2017-07-22
+    	描述：注销
+    -->
+    <script>
+    	function logOut(){
+    		$.cookie('newestUserId', null, {
+            	expires : -1,
+	        });
+	        $.cookie('newestUserPassword', null, {
+	            expires : -1,
+	        });
+	        $.cookie('newestUserName',null, {
+	            expires : -1,
+	        });
+	        $("#myName").val("Newest");
+    	}
+    	$("#log-out").click(function(){
+    		logOut();
+    		window.location.reload();
+    	})
+    </script>
 	
 	<!--
     	作者：731275785@qq.com
@@ -162,7 +212,14 @@
     	描述：动态添加
     -->
     <script>
-    	$("ul").append(list);
+    	function appendList(postId,authorName,authorId,title,content,time,author_pic,liked){
+    		$("ul").append(list);
+    		
+    		$("ul li:last-child").data("postId",postId);
+    		$("ul li:last-child").children(".list-news-top").children(".media-head").css("background-image","url("+author_pic+")");
+    		$("ul li:last-child").children(".list-news-top").children(".media-name").html(title);
+    		
+    	}
     </script>
     
     <!--
