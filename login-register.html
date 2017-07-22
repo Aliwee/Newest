@@ -93,9 +93,12 @@
 	描述：全局变量
 -->
 <script>
-	var u1 = "http://119.29.162.115:4567/login";
-	var u2 = "http://119.29.162.115:4567/register-1";
-	var u3 = "http://119.29.162.115:4567/register-2";
+	//var u1 = "http://119.29.162.115:4567/login";
+//	var u2 = "http://119.29.162.115:4567/register-1";
+//	var u3 = "http://119.29.162.115:4567/register-2";
+	var u1 = "http://121.48.228.194:4567/login";
+	var u2 = "http://121.48.228.194:4567/register-1";
+	var u3 = "http://121.48.228.194:4567/register-2";
 	var canPost1 = false;
 	var canPost2 = false;
 	var canPost3 = false;	
@@ -340,18 +343,21 @@
 					ajaxobj = JSON.parse(data);
 					if(ajaxobj.isOk == false){
                 $("#nodify1").html(ajaxobj.msg);
-            }
+          }
 					else{
 						if($("#check").attr("checked")){
 							$.cookie('newestUserId',ajaxobj.user.user_id,{
-								expiraes: 7
+								expires: 7,
 							});
 							$.cookie('newestUserName',ajaxobj.user.user_name,{
-								expires: 7
+								expires: 7,
 							});
 							$.cookie('newestUserPassword',ajaxobj.user.password,{
-								expires: 7
+								expires: 7,
 							});	
+							$.cookie('newestUserPic',ajaxobj.user.pic,{
+								expires: 7,
+							});
 							window.location.href=indexURL;
 						}
 						else

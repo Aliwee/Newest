@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="js/jquery-3.2.1.min.js"></script>
+		<script src="js/jquery.cookie.js"></script>
+	</head>
+	<body>
+		<div id="content1"></div>
+		<div id="content2"></div>
+		<div id="content3"></div>
+		<div id="content4"></div>
+		
+	<!--
+    	作者：731275785@qq.com
+    	时间：2017-07-22
+    	描述：全局变量
+    -->
+	<script>
+		var u1 = "http://121.48.228.194:4567/post-details";
+		var postId = window.location.href.split("=")[1];
+		var ajaxobj;
+	</script>
+	
+	<!--
+    	作者：731275785@qq.com
+    	时间：2017-07-22
+    	描述：点击查看详情
+    -->
+    <script>
+    	function sendSpecifyPost(dataId){
+    		$.ajax({
+				type:"post",
+				url:u1,
+				async:true,
+				contentType: "application/x-www-form-urlencoded; charset=utf-8",
+				data:{
+					post_id: dataId
+				},
+				success: function(data){
+					ajaxobj = JSON.parse(data);
+					if(ajaxobj.isOk == true){
+						$("#content1").html(ajaxobj.PostAndComments.post_id);
+						$("#content2").html(ajaxobj.PostAndComments.comments.length);
+					}
+				}
+			});
+    	}
+    	
+    	sendSpecifyPost(postId);
+    	
+    </script>
+	</body>
+</html>

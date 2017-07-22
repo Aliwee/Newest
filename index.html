@@ -26,16 +26,35 @@
 			margin-left: 10px;
 		}
 	</style>
+	<!--
+    	作者：731275785@qq.com
+    	时间：2017-07-22
+    	描述：验证登录与加载用户数据
+    -->
+	<script>
+		if(!$.cookie('newestUserId') &&  !$.cookie('newestUserName')){
+			window.location.href = "login-register.html";
+		}
+	</script>
 </head>
 <body>
 	<div id="index-container">
 		<div id="index-head">
 			<div id="index-head-inner">
 				<img style="height: 50px; float: left;" src="pic/title.png">
-				<nav id="index-head-nav">
-					<a href="">新闻</a>
-					<a href="">新鲜事</a>
-				</nav>
+				<ul id="index-head-nav">
+					<li><a href="">新闻</a>
+						<ul>
+							<li><a href="">科技</a></li>
+							<li><a href="">软件</a></li>
+							<li><a href="">游戏</a></li>
+							<li><a href="">影视</a></li>
+							<li><a href="">音乐</a></li>
+							<li><a href="">趣闻</a></li>
+						</ul>
+					</li>
+					<li><a href="">新鲜事</a></li>
+				</ul>
 				<div class="search-bar">
 					<div id="popver">
 						<div id="search-bar-container">
@@ -49,49 +68,16 @@
 		</div>
 		<div style="padding: 0 16px;margin: 65px auto auto auto">
 			<div id="new-content">
-				<div id="guide">
-					<div class="guide-ring" id="tech">科技</div>
-					<div class="guide-ring" id="society">社会</div>
-					<div class="guide-ring" id="life">生活</div>
-					<div class="guide-ring" id="army">军事</div>
-				</div>
 				<div id="new-container">
 					<div id="content-main">
-						<ul>
-							<li class="list-news">
-								<div class="list-news-top">
-									<div class="media-head"></div>
-									<div class="media-name">Tencent</div>
-									<div class="news-classify">
-										<div class="review" style="margin-right: 4px;">科技</div>
-									</div>
-								</div>
-								<div class="new-item-content">
-									<h3>
-										<a>AI产业规模2020年破万亿 自动驾驶等将加快制定法规</a>
-									</h3>
-									<div class="new-item-content-inner">谁先成为人工智能技术强国，谁就掌握了这轮科技革命的先机。7月20日，国务院印发《新一代人工智能发展规划》（以下简称《规划》），明确到2020年，部分领域的人工智能伦理规范和政策法规初步建立，到2030年建成更加完善的人工智能法律法规、伦理规范和政策体系。需要突破的基础理论包括加强大数据智能、跨媒体感知计算、人机混合智能、群体智能、自主协同与决策等。关键共性技术包括知识计算引擎与知识服务、跨媒体分析推理、群体智能关键技术、混合增强智能新架构与新技术、自主无人系统的智能技术等。</div>
-								</div>
-								<div class="list-news-action">
-									<div class="list-news-action-review">
-										<img src="pic/review.png">
-										<div class="review">评论</div>
-									</div>
-									<div class="list-news-action-like">
-										<img id="like" src="pic/like.png">
-										<div id="like-num" class="review">20</div>
-										<div class="review">喜欢</div>
-									</div>
-									<div class="list-news-action-time">2017年07月21日 06:07:29</div>
-								</div>
-							</li>
+						<ul id="ul-for-new">
 						</ul>
 					</div>
 				</div>
 			</div>
 			<div id="index-right">
 				<div id="right-container">
-					<div class="person-head"></div>
+					<div class="person-head" id="myHeadPic"></div>
 					<div class="person-name" id="myName"></div>
 					<div class="person-piece">
 						<img height="20px" style="float: left;" src="pic/review.png">
@@ -117,7 +103,10 @@
     	描述：全局变量
     -->
     <script>
-    	var u1 = "http://121.48.228.194:4567/post";
+    	var u1 = "http://119.29.162.115:4567/post";
+    	var u2 = "http://119.29.162.115:4567/get-new-post";
+    	var u3 = "http://119.29.162.115:4567/like";
+    	var u4 = "specify.html?postId=";
     	var ajaxobj;
     	var list = 
     	'<li class="list-news">' +
@@ -125,7 +114,7 @@
     			'<div class="media-head"></div>' +
     			'<div class="media-name"></div>' +
 	    		'<div class="news-classify">'+
-	    			'<div class="review" style="margin-right:4px;"></div>' +
+	    			'<div class="review" style="margin-right:4px;">新鲜事</div>' +
 	    		'</div>' +
     		'</div>' +
     		'<div class="new-item-content">' +
@@ -138,33 +127,167 @@
     				'<div class="review">评论</div>' +
     			'</div>' +
     			'<div class="list-news-action-like">' +
-    				'<img src="pic/like.png">' +
+    				'<img>' +
     				'<div class="review"></div>' +
     				'<div class="review">喜欢</div>' +
     			'</div>' +
     			'<div class="list-news-action-time"></div>' +
     		'</div>' +
     	'</li>';
+    	var empty = '<li>没有更多数据了</li>';
+    	var canPost = false;
+    </script>
+    
+    <!--
+    	作者：731275785@qq.com
+    	时间：2017-07-21
+    	描述：喜欢的切换
+    -->
+	<script>
+		function sendAddLike(dataId){
+			$.ajax({
+				type:"post",
+				url:u3,
+				async:true,
+				contentType: "application/x-www-form-urlencoded; charset=utf-8",
+				data:{
+					post_id: dataId,
+					user_id: $.cookie('newestUserId'),
+					liked: +1
+				},
+				success: function(data){
+					ajaxobj = JSON.parse(data);
+					if(ajaxobj.isOk == true){
+						alert("OK");
+					}
+				}
+			});
+		}
+		function sendSubLike(dataId){
+			$.ajax({
+				type:"post",
+				url:u3,
+				async:true,
+				contentType: "application/x-www-form-urlencoded; charset=utf-8",
+				data:{
+					post_id: dataId,
+					user_id: $.cookie('newestUserId'),
+					liked: -1
+				},
+				success: function(data){
+					ajaxobj = JSON.parse(data);
+					if(ajaxobj.isOk == true){
+						alert("OK");
+					}
+				}
+			});
+		}
+		
+		$("body").on("click","img", function(){
+			if($(this).attr("src") == "pic/like.png" && $(this).attr("id") == null){
+				$(this).attr("src","pic/like-click.png");
+				
+				var likeNum = $(this).next().html();
+				$(this).next().html(Number(likeNum)+1);
+				
+				sendAddLike($(this).parent().parent().parent().data("postId"));
+				
+			}
+			else if($(this).attr("src") == "pic/like-click.png" && $(this).attr("id") == null){
+				$(this).attr("src","pic/like.png");
+				
+				var likeNum = $(this).next().html();                                                           
+				$(this).next().html(Number(likeNum)-1);
+				
+				sendSubLike($(this).parent().parent().parent().data("postId"));
+			}
+			else{
+				//do nothing
+			}
+		});
+	</script>
+	
+	<!--
+    	作者：731275785@qq.com
+    	时间：2017-07-22
+    	描述：点击查看详情
+    -->
+    <script>
+    	$("body").on("click","h3 a:first-child", function(){
+    		window.location.href = u4 + $(this).parent().parent().parent().data("postId");
+    	});
     </script>
     
      <script>
     	function sendPrePost(){
     		$.ajax({
-    			type:"get",
+    			type:"post",
     			url:u1,
     			async:true,
     			contentType: "application/x-www-form-urlencoded; charset=utf-8",
+    			data:{
+    				user_id: $.cookie('newestUserId')
+    			},
  				success:function(data){
  					ajaxobj = JSON.parse(data);
  					if(ajaxobj.isOk == true){
-   						appendList(ajaxobj.posts[0].post_id,ajaxobj.posts[0].author_name,
-   						ajaxobj.posts[0].author_id,ajaxobj.posts[0].title,
-   						ajaxobj.posts[0].content,ajaxobj.posts[0].time,
-   						ajaxobj.posts[0].author_pic,ajaxobj.posts[0].liked);
+						for(var i=0; i<ajaxobj.posts.length; i++){
+							appendList(ajaxobj.posts[i].post_id,ajaxobj.posts[i].author_name,
+		   					ajaxobj.posts[i].author_id,ajaxobj.posts[i].title,
+		   					ajaxobj.posts[i].content,ajaxobj.posts[i].time,
+		   					ajaxobj.posts[i].author_pic,
+		   					ajaxobj.posts[i].isLiked,ajaxobj.posts[i].liked);
+						}
  					}
  				}
     		});
     	}
+    </script>
+    
+    <!--
+    	作者：731275785@qq.com
+    	时间：2017-07-22
+    	描述：下拉滚动刷新
+    -->
+    <script>
+    	function sendMorePost(lastId){
+    		$.ajax({
+    			type:"post",
+    			url:u2,
+    			async:true,
+    			contentType: "application/x-www-form-urlencoded; charset=utf-8",
+    			data:{
+    				post_id: lastId,
+    				user_id: $.cookie('newestUserId')
+    			},
+ 				success:function(data){
+ 					ajaxobj = JSON.parse(data);
+ 					if(ajaxobj.isOk == true){
+ 						if(ajaxobj.posts.length > 0){
+ 							canPost = false;
+	 						for(var i=0; i<ajaxobj.posts.length; i++){
+								appendList(ajaxobj.posts[i].post_id,ajaxobj.posts[i].author_name,
+		   						ajaxobj.posts[i].author_id,ajaxobj.posts[i].title,
+		   						ajaxobj.posts[i].content,ajaxobj.posts[i].time,
+		   						ajaxobj.posts[i].author_pic,
+		   						ajaxobj.posts[i].isLiked,ajaxobj.posts[i].liked);
+							}	
+ 						}
+ 						else{
+ 							$("#ul-for-new").append(empty);
+ 						}
+ 					}
+ 				}
+    		});
+    	}
+
+		$(window).bind('scroll', function(){    //绑定滚动事件
+		    if($(document).scrollTop() + $(window).height() >= $(document).height() && !canPost){
+				sendMorePost($("#ul-for-new li:last-child").data("postId"));
+				canPost = true;
+		    }
+		});    
+    	
     </script>
     
     <!--
@@ -175,10 +298,9 @@
 	<script>
 		if($.cookie('newestUserId') &&  $.cookie('newestUserName')){
 			$("#myName").html($.cookie('newestUserName'));
+			$("#myHeadPic").css("background-image","url("+$.cookie('newestUserPic')+")");
+			$("#myHeadPic").css("background-size","100px 100px");
 			sendPrePost();
-		}
-		else{
-			window.location.href = "login-register.html";
 		}
 	</script>
 	
@@ -198,7 +320,9 @@
 	        $.cookie('newestUserName',null, {
 	            expires : -1,
 	        });
-	        $("#myName").val("Newest");
+	        $.cookie('newestUserPic',null, {
+	            expires : -1,
+	        });
     	}
     	$("#log-out").click(function(){
     		logOut();
@@ -212,33 +336,26 @@
     	描述：动态添加
     -->
     <script>
-    	function appendList(postId,authorName,authorId,title,content,time,author_pic,liked){
-    		$("ul").append(list);
+    	function appendList(postId,authorName,authorId,title,content,time,author_pic,isLiked,liked){
     		
-    		$("ul li:last-child").data("postId",postId);
-    		$("ul li:last-child").children(".list-news-top").children(".media-head").css("background-image","url("+author_pic+")");
-    		$("ul li:last-child").children(".list-news-top").children(".media-name").html(title);
+    		$("#ul-for-new").append(list);
+    		
+    		$("#ul-for-new li:last-child").data("postId",postId);
+    		$("#ul-for-new li:last-child").children(".list-news-top").children(".media-head").css("background-image","url("+author_pic+")");
+    		$("#ul-for-new li:last-child").children(".list-news-top").children(".media-head").css("background-size","26px 26px");
+    		$("#ul-for-new li:last-child").children(".list-news-top").children(".media-name").html(authorName);
+    		$("#ul-for-new li:last-child").children(".new-item-content").children("h3").children("a").html(title);
+    		$("#ul-for-new li:last-child").children(".new-item-content").children(".new-item-content-inner").html(content);
+    		$("#ul-for-new li:last-child").children(".list-news-action").children(".list-news-action-like").children(".review").first().html(liked);
+    		if(isLiked){
+    			$("#ul-for-new li:last-child").children(".list-news-action").children(".list-news-action-like").children("img").attr("src","pic/like-click.png");
+    		}
+    		else{
+    			$("#ul-for-new li:last-child").children(".list-news-action").children(".list-news-action-like").children("img").attr("src","pic/like.png");
+    		}
+    		$("#ul-for-new li:last-child").children(".list-news-action").children(".list-news-action-time").html(time);
     		
     	}
     </script>
-    
-    <!--
-    	作者：731275785@qq.com
-    	时间：2017-07-21
-    	描述：喜欢的切换,on方法一定在append之后!!!
-    -->
-	<script>
-		$("img").on("click", function(){
-			if($(this).attr("src") == "pic/like.png" && $(this).attr("id") == null){
-				$(this).attr("src","pic/like-click.png");
-			}
-			else if($(this).attr("src") == "pic/like-click.png" && $(this).attr("id") == null){
-				$(this).attr("src","pic/like.png");
-			}
-			else{
-				//do nothing
-			}
-		});
-	</script>
 </body>
 </html>
