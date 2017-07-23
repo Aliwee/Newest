@@ -251,7 +251,8 @@
 				data:{
 					user_id: $("#user-re").val(),
 					user_name: $("#user-name").val(),
-					password: $("#repass").val()},
+					password: $("#repass").val()
+				},
 				success:function(data){
 					ajaxobj = JSON.parse(data);
 					if(ajaxobj.isOk==false){
@@ -338,7 +339,8 @@
 				contentType: "application/x-www-form-urlencoded; charset=utf-8",
 				data:{
 					user_id: $("#user").val(),
-					password: $("#pass").val()},
+					password: $("#pass").val()
+				},
 				success:function(data){
 					ajaxobj = JSON.parse(data);
 					if(ajaxobj.isOk == false){
@@ -375,24 +377,27 @@
 	描述：从缓存中登录
 -->
 <script>
-	$.ajax({
-		type:"post",
-		url:u1,
-		async:true,
-		contentType: "application/x-www-form-urlencoded; charset=utf-8",
-		data:{
-					user_id: $.cookie('newestUserId'),
-					password: $.cookie('newestUserPassword')},
-		success:function(data){
-			ajaxobj = JSON.parse(data);
-			if(ajaxobj.isOk == false){
-        $("#nodify1").html(ajaxobj.msg);
-      }
-			else{
-				window.location.href=indexURL;
+	if($.cookie('newestUserId') && $.cookie('newestUserPassword')){
+		$.ajax({
+			type:"post",
+			url:u1,
+			async:true,
+			contentType: "application/x-www-form-urlencoded; charset=utf-8",
+			data:{
+						user_id: $.cookie('newestUserId'),
+						password: $.cookie('newestUserPassword')
+						},
+			success:function(data){
+				ajaxobj = JSON.parse(data);
+				if(ajaxobj.isOk == false){
+	        $("#nodify1").html(ajaxobj.msg);
+	      }
+				else{
+					window.location.href = indexURL;
+				}
 			}
-		}
-	});
+		});	
+	}
 </script>
 
 </body>

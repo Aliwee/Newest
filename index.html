@@ -43,6 +43,7 @@
 			<div id="index-head-inner">
 				<img style="height: 50px; float: left;" src="pic/title.png">
 				<ul id="index-head-nav">
+					<li><a href="index.html">新鲜事</a></li>
 					<li><a href="">新闻</a>
 						<ul>
 							<li><a href="">科技</a></li>
@@ -53,12 +54,11 @@
 							<li><a href="">趣闻</a></li>
 						</ul>
 					</li>
-					<li><a href="">新鲜事</a></li>
 				</ul>
 				<div class="search-bar">
 					<div id="popver">
 						<div id="search-bar-container">
-							<input id="search-bar-input" type="text" placeholder="搜索你感兴趣的内容">
+							<input id="search-bar-input" type="text" placeholder="搜索你感兴趣的内容" style="width: 265px;">
 							<button id="search-bar-button"></button>
 						</div>
 					</div>
@@ -282,7 +282,7 @@
     	}
 
 		$(window).bind('scroll', function(){    //绑定滚动事件
-		    if($(document).scrollTop() + $(window).height() >= $(document).height() && !canPost){
+		    if($(document).scrollTop() + $(window).height() == $(document).height() && !canPost){
 				sendMorePost($("#ul-for-new li:last-child").data("postId"));
 				canPost = true;
 		    }
