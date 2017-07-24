@@ -164,7 +164,18 @@ a .hf-pl{
 .hf-list-con .all-pl-con:first-child {
     border-top: 0;
 }
-
+.new-item-content-inner-news img{
+    width: 100%;
+    height: auto;
+}
+.new-item-content-inner-news video{
+    width: 100%;
+    height: auto;
+}
+.new-item-content-inner-news embed{
+    width: 100%;
+    height: auto;
+}
 
 
 /*----------评论区域 end----------*/

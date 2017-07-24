@@ -95,3 +95,6 @@ textarea,
         background-size: 51px auto;
     }
 }
+ul li a{
+    padding: 0 10px;
+}

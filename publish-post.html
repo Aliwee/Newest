@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>newest</title>
+	<link rel="stylesheet" media="screen" href="css/index.css">
+	<link rel="stylesheet" type="text/css" href="font/font.css">
+	<link rel="stylesheet" type="text/css" href="css/person-news.css">
+	<script src="js/jquery-3.2.1.min.js"></script>
+	<script src="js/jquery.cookie.js"></script>
+	<style>
+		.review{
+			float: left;
+			font-size: 13px;
+			height: 30px;
+			line-height: 30px;
+		}
+		#right-container .review{
+			height: 20px;
+			font-size: 14px;
+			line-height: 20px;
+			margin-left: 10px;
+		}
+	</style>
+	<!--
+    	作者：731275785@qq.com
+    	时间：2017-07-22
+    	描述：验证登录与加载用户数据
+    -->
+	<script>
+		if(!$.cookie('newestUserId') &&  !$.cookie('newestUserName')){
+			window.location.href = "login-register.html";
+		}
+	</script>
+</head>
+<body>
+	<div id="index-container">
+		<div id="index-head">
+			<div id="index-head-inner">
+				<img style="height: 50px; float: left;" src="pic/title.png">
+				<ul id="index-head-nav">
+					<li><a href="index.html">新鲜事</a>
+						<ul>
+							<li><a href="publish-post.html">发布</a></li>
+							<li><a href="mypost.html">我的</a></li>
+						</ul>
+					</li>
+					<li><a>新闻</a>
+						<ul>
+							<li><a id="new-tech">要闻</a></li>
+							<li><a id="new-science">科学</a></li>
+							<li><a id="new-soft">软件</a></li>
+							<li><a id="new-game">游戏</a></li>
+							<li><a id="new-movie">影视</a></li>
+							<li><a id="new-comic">动漫</a></li>
+							<li><a id="new-funny">趣闻</a></li>
+						</ul>
+					</li>
+				</ul>
+				<div class="search-bar">
+					<div id="popver">
+						<div id="search-bar-container">
+							<input id="search-bar-input" type="text" placeholder="搜索你感兴趣的内容">
+							<button id="search-bar-button"></button>
+						</div>
+					</div>
+				</div>
+				<button class="search-button">搜索</button>
+				<button class="search-button" style="padding-right:6px;">搜索用户</button>
+			</div>
+		</div>
+		<div style="padding: 0 16px;margin: 65px auto auto auto">
+			<div id="new-content">
+				<div id="new-container-person">
+					<div id="person-new-content">
+						<div id="person-new-title">写下你身边的新鲜事</div>
+						<div class="person-new-subtitle" style="height: 37px;">
+							<textarea maxlength="30" class="person-new-subtitle-container" style="height: 100%" placeholder="新鲜事标题（限30字）" id="title"></textarea>
+						</div>
+						<div class="person-new-subtitle" style="height: 200px;">
+							<textarea class="person-new-subtitle-container" placeholder="详细信息(若有图片，请使用markdown语法上传)" style="height: 100%;overflow: auto;" id="content"></textarea>
+						</div>
+						<p id="nodify" style="color: #ed2470;"></p>
+						<input id="submit-person-news" type="submit" value="发布新鲜事" >
+					</div>		
+				</div>
+			</div>
+			<div id="index-right">
+				<div id="right-container">
+					<div class="person-head" id="myHeadPic"></div>
+					<div class="person-name" id="myName"></div>
+					<div class="person-piece">
+						<img height="20px" style="float: left;" src="pic/review.png">
+						<div class="review" id="myReview">@我的</div>
+					</div>
+					<div class="person-piece">
+						<img id="myLikePic" height="20px" style="float: left;" src="pic/like.png">
+						<div id="myLike" class="review">我的喜欢</div>
+					</div>
+					<div class="person-piece">
+						<img height="20px" style="float: left;" src="pic/setup.png">
+						<div class="review" id="mySetting">设置</div>
+					</div>
+					<button id="log-out">注 销</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!--
+    	作者：731275785@qq.com
+    	时间：2017-07-24
+    	描述：全局变量
+    -->
+    <script>
+    	var u = "http://119.29.162.115:4567/";
+    	var u1 = u + "make-new-post";
+    	var canPost = false;
+    	var ajaxobj;
+    </script>
+    
+    <!--
+    	作者：731275785@qq.com
+    	时间：2017-07-24
+    	描述：发表新鲜事
+    -->
+    <script>
+    	function makePost(title,content){
+    		$.ajax({
+    			type:"post",
+    			url:u1,
+    			async:true,
+    			contentType: "application/x-www-form-urlencoded; charset=utf-8",
+    			data:{
+    				title: title,
+    				content: content,
+    				user_id: $.cookie('newestUserId')
+    			},
+    			success:function(data){
+    				ajaxobj = JSON.parse(data);
+    				if(ajaxobj.isOk == true){
+    					window.location.href = "index.html";
+    				}
+    				else{
+    					$("#nodify").html(ajaxobj.msg);
+    				}
+    			}
+    		});
+    	}
+    	function checkPost(){
+    		if($("#title").val() == ""){
+    			$("#nodify").html("请输入新鲜事标题哦");
+    			return;
+    		}
+    		if($("#content").val() == ""){
+    			$("#nodify").html("请输入新鲜事内容哦");
+    			return;
+    		}
+    		if($("#title").val()!="" && $("#content").val() != ""){
+    			$("#nodify").html("");
+    			canPost = true;	
+    		}
+    	}
+    	$("#submit-person-news").click(function(){
+    		checkPost();
+    		if(canPost){
+    			makePost($("#title").val(),$("#content").val());
+    		}
+    	});
+    	
+    	$("#title").keyup(function(){
+    		checkPost();
+    	});
+    	$("#content").keyup(function(){
+    		checkPost();
+    	});
+    </script>
+    
+    <!--
+    	作者：731275785@qq.com
+    	时间：2017-07-22
+    	描述：验证登录与加载用户数据
+    -->
+	<script>
+		if($.cookie('newestUserId') &&  $.cookie('newestUserName')){
+			$("#myName").html($.cookie('newestUserName'));
+			$("#myHeadPic").css("background-image","url("+$.cookie('newestUserPic')+")");
+			$("#myHeadPic").css("background-size","100px 100px");
+		}
+	</script>
+	
+	<!--
+    	作者：731275785@qq.com
+    	时间：2017-07-22
+    	描述：注销
+    -->
+    <script>
+    	function logOut(){
+    		$.cookie('newestUserId', null, {
+            	expires : -1,
+	        });
+	        $.cookie('newestUserPassword', null, {
+	            expires : -1,
+	        });
+	        $.cookie('newestUserName',null, {
+	            expires : -1,
+	        });
+	        $.cookie('newestUserPic',null, {
+	            expires : -1,
+	        });
+    	}
+    	$("#log-out").click(function(){
+    		logOut();
+    		window.location.reload();
+    	})
+    </script>
+    
+    <!--
+    	作者：731275785@qq.com
+    	时间：2017-07-24
+    	描述：选择新闻种类
+    -->
+    <script>
+    	$("#new-funny").click(function(){
+    		window.location.href = "subnew.html?category=funny";
+    	});
+    	$("#new-game").click(function(){
+    		window.location.href = "subnew.html?category=game";
+    	});
+    	$("#new-movie").click(function(){
+    		window.location.href = "subnew.html?category=movie";
+    	});
+    	$("#new-comic").click(function(){
+    		window.location.href = "subnew.html?category=comic";
+    	});
+    	$("#new-soft").click(function(){
+    		window.location.href = "subnew.html?category=soft";
+    	});
+    	$("#new-tech").click(function(){
+    		window.location.href = "subnew.html?category=tech";
+    	});
+    	$("#new-science").click(function(){
+    		window.location.href = "subnew.html?category=science";
+    	})
+    </script>
+</body>
+</html>

@@ -129,17 +129,18 @@ a:hover{
 	border: none;
 	cursor:pointer;
 }
-#search-button{
+.search-button{
 	float: left;
-	width: 60px;
+	width: auto;
 	background: #84CDFC;
 	height: 30px;
 	margin: 10px;
-	padding: 5px 5px;
+	padding: 5px 15px;
 	color: #fff;
 	border: 0.5px solid #e7eaf1;
 	border-radius: 5px;
 	cursor: pointer;
+	letter-spacing: 6px;
 }
 #new-content{
 	width: 66%;
@@ -149,7 +150,7 @@ a:hover{
 }
 #new-container{
 	width: 80%;
-	height: 100%;
+	height: auto;
 	margin-right: 2%;
 	float: right;
 	background: #ffffff;
@@ -162,7 +163,15 @@ a:hover{
 	font-size: 1.2rem;
 	height: auto;
 }
-
+#none{
+	width: 100%;
+	height: auto;
+	padding: 0;
+	color: #636363;
+	text-align: center;
+	padding-bottom: 5px;
+	font-family: fz;
+}
 .list-news{
 	padding-bottom: 20px;
 	margin-bottom: 15px;
@@ -207,7 +216,7 @@ a:hover{
 }
 h3{
 	line-height: 30px;
-	height: 30px;
+	height: auto;
 	margin: 0;
 }
 h3 a{
@@ -313,15 +322,6 @@ h3 a{
 	background: #ed6452;
 	color: #fff;
 }
-#none{
-	width: 100%;
-	height: auto;
-	padding: 0;
-	color: #636363;
-	text-align: center;
-	padding-bottom: 5px;
-	font-family: fz;
-}
 #delete-mynews{
 	padding-left: 15px;
 	font-family: fz;
@@ -331,4 +331,58 @@ h3 a{
 #delete-mynews:hover{
 	color: #84CDFC;
 }
-
+#mylike{
+	font-family: fz;
+	color: #636363;
+	width: 80%;
+	font-size: 17px;
+	height: 50px;
+	margin-right: 2%;
+	margin-bottom: 15px;
+	float: right;
+	background: #ffffff;
+	box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+	line-height: 50px;
+}
+.hf-con a:hover{
+	background:#63acdb;
+	color: #fff;
+}
+#setup{
+	font-family: fz;
+	color: #636363;
+	width: 80%;
+	font-size: 17px;
+	height: 50px;
+	margin-right: 2%;
+	margin-bottom: 15px;
+	float: right;
+	background: #ffffff;
+	box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+	line-height: 50px;
+}
+#comment-me{
+	font-family: fz;
+	color: #636363;
+	width: 80%;
+	font-size: 17px;
+	height: 100px;
+	margin-right: 2%;
+	margin-bottom: 15px;
+	float: right;
+	background: #ffffff;
+	box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+	line-height: 50px;
+}
+#comment-me-l{
+	padding: 20px;
+	width: 60px;
+	height: 60px;
+	float: left;
+}
+#comment-me-m{
+	padding: 20px;
+	height: auto;
+	height: 60px;
+	float: left;
+}

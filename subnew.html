@@ -92,8 +92,8 @@
 						<div class="review" id="myReview">@我的</div>
 					</div>
 					<div class="person-piece">
-						<img id="myLikePic" height="20px" style="float: left;" src="pic/like.png">
-						<div id="myLike" class="review">我的喜欢</div>
+						<img height="20px" style="float: left;" src="pic/like.png">
+						<div class="review" id="myLike">我的喜欢</div>
 					</div>
 					<div class="person-piece">
 						<img height="20px" style="float: left;" src="pic/setup.png">
@@ -104,15 +104,15 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<!--
     	作者：731275785@qq.com
-    	时间：2017-07-21
+    	时间：2017-07-22
     	描述：全局变量
     -->
     <script>
-    	var u ="http://119.29.162.115:4567/";
 //  	var u = "http://172.20.10.3:4567/";
+		var u ="http://119.29.162.115:4567/";
     	var u1 = u + "post";
     	var u2 = u + "get-new-post";
     	var u3 = u + "like";
@@ -145,9 +145,10 @@
     		'</div>' +
     	'</li>';
     	var canPost = false;
+    	var categoryName = window.location.href.split("=")[1];
     </script>
-    
-    <!--
+	
+	<!--
     	作者：731275785@qq.com
     	时间：2017-07-21
     	描述：喜欢的切换
@@ -227,8 +228,8 @@
     	});
     </script>
     
-     <script>
-    	function sendPrePost(){
+    <script>
+    	function sendPrePost(categoryName){
     		$.ajax({
     			type:"post",
     			url:u1,
@@ -236,7 +237,7 @@
     			contentType: "application/x-www-form-urlencoded; charset=utf-8",
     			data:{
     				user_id: $.cookie('newestUserId'),
-    				category: "新鲜事"
+    				category: categoryName
     			},
  				success:function(data){
  					ajaxobj = JSON.parse(data);
@@ -261,7 +262,7 @@
     	描述：下拉滚动刷新
     -->
     <script>
-    	function sendMorePost(lastId){
+    	function sendMorePost(lastId,categoryName){
     		$.ajax({
     			type:"post",
     			url:u2,
@@ -270,7 +271,7 @@
     			data:{
     				post_id: lastId,
     				user_id: $.cookie('newestUserId'),
-    				category: "新鲜事"
+    				category: categoryName
     			},
  				success:function(data){
  					ajaxobj = JSON.parse(data);
@@ -296,14 +297,14 @@
 
 		$(window).bind('scroll', function(){    //绑定滚动事件
 		    if($(document).scrollTop() + $(window).height() >= $(document).height() && !canPost){
-				sendMorePost($("#ul-for-new li:last-child").data("postId"));
+				sendMorePost($("#ul-for-new li:last-child").data("postId"),categoryName);
 				canPost = true;
 		    }
 		});    
     	
     </script>
-    
-    <!--
+	
+	<!--
     	作者：731275785@qq.com
     	时间：2017-07-22
     	描述：验证登录与加载用户数据
@@ -313,8 +314,11 @@
 			$("#myName").html($.cookie('newestUserName'));
 			$("#myHeadPic").css("background-image","url("+$.cookie('newestUserPic')+")");
 			$("#myHeadPic").css("background-size","100px 100px");
-			sendPrePost();
+			sendPrePost(categoryName);
 			$("#none").hide();
+		}
+		else{
+			window.location.href="index.html";
 		}
 	</script>
 	
@@ -359,7 +363,27 @@
     		$("#ul-for-new li:last-child").children(".list-news-top").children(".media-head").css("background-image","url("+author_pic+")");
     		$("#ul-for-new li:last-child").children(".list-news-top").children(".media-head").css("background-size","26px 26px");
     		$("#ul-for-new li:last-child").children(".list-news-top").children(".media-name").html(authorName);
-      		$("#ul-for-new li:last-child").children(".list-news-top").children(".news-classify").children(".review").html(category);
+    		if(category == "game"){
+      			$("#ul-for-new li:last-child").children(".list-news-top").children(".news-classify").children(".review").html("游戏");	
+    		}
+    		else if(category == "science"){
+      			$("#ul-for-new li:last-child").children(".list-news-top").children(".news-classify").children(".review").html("科学");	
+    		}
+    		else if(category == "tech"){
+      			$("#ul-for-new li:last-child").children(".list-news-top").children(".news-classify").children(".review").html("要闻");	
+    		}
+    		else if(category == "soft"){
+      			$("#ul-for-new li:last-child").children(".list-news-top").children(".news-classify").children(".review").html("软件");	
+    		}
+    		else if(category == "funny"){
+      			$("#ul-for-new li:last-child").children(".list-news-top").children(".news-classify").children(".review").html("趣闻");	
+    		}
+    		else if(category == "comic"){
+      			$("#ul-for-new li:last-child").children(".list-news-top").children(".news-classify").children(".review").html("动漫");	
+    		}
+    		else{
+    			$("#ul-for-new li:last-child").children(".list-news-top").children(".news-classify").children(".review").html("影视");
+    		}
     		$("#ul-for-new li:last-child").children(".new-item-content").children("h3").children("a").html(title);
     		$("#ul-for-new li:last-child").children(".new-item-content").children(".new-item-content-inner").html(content);
     		$("#ul-for-new li:last-child").children(".list-news-action").children(".list-news-action-like").children(".review").first().html(liked);
@@ -372,9 +396,9 @@
     		$("#ul-for-new li:last-child").children(".list-news-action").children(".list-news-action-time").html(time);
     		
     	}
+    	
     </script>
-    
-    <!--
+	<!--
     	作者：731275785@qq.com
     	时间：2017-07-24
     	描述：选择新闻种类

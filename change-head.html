@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>setting-head</title>
+	<link rel="stylesheet" media="screen" href="css/index.css">
+	<link rel="stylesheet" type="text/css" href="font/font.css">
+	<link rel="stylesheet" type="text/css" href="css/setup.css">
+	<style>
+		.review{
+			float: left;
+			font-size: 13px;
+			height: 30px;
+			line-height: 30px;
+		}
+		#right-container .review{
+			height: 20px;
+			font-size: 14px;
+			line-height: 20px;
+			margin-left: 10px;
+		}
+	</style>
+</head>
+<body>
+	<div id="index-container">
+		<div id="index-head">
+			<div id="index-head-inner">
+				<a href="index.html"><img style="height: 50px; float: left;" src="pic/title.png"></a>
+				<ul id="index-head-nav">
+					<li><a href="">新鲜事</a>
+						<ul>
+							<li><a href="">发布</a></li>
+							<li><a href="">我的</a></li>
+						</ul>
+					</li>
+					<li><a href="">新闻</a>
+						<ul>
+							<li><a href="">科技</a></li>
+							<li><a href="">软件</a></li>
+							<li><a href="">游戏</a></li>
+							<li><a href="">影视</a></li>
+							<li><a href="">音乐</a></li>
+							<li><a href="">趣闻</a></li>
+						</ul>
+					</li>
+				</ul>
+				<div class="search-bar">
+					<div id="popver">
+						<div id="search-bar-container">
+							<input id="search-bar-input" type="text" placeholder="搜索你感兴趣的内容">
+							<button id="search-bar-button"></button>
+						</div>
+					</div>
+				</div>
+				<button class="search-button">搜索</button>
+				<button class="search-button" style="padding-right:6px;">搜索用户</button>
+			</div>
+		</div>
+		<div style="padding: 0 16px;margin: 65px auto auto auto">
+			<div id="new-content">
+				<div id="setup">
+					<a href="setup.html"><div class="setup-tab">我的信息</div></a>
+					<div style="cursor:text;" class="setup-tab">我的头像</div>
+					<a href="change-password.html"><div class="setup-tab">修改密码</div></a>
+				</div>
+				<div id="new-container">
+					<div id="setup-content-main">
+						<div style="height: 250px;">
+							<div class="circle">
+								<img src="pic/user-head.png">
+							</div>
+						</div>
+						<div class="setup-container">
+							<a href="change-password2.html">
+								<button style="margin-left: 43%;margin-right: 43%;" class="search-button">下一步</button>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="index-right">
+				<div id="right-container">
+					<div class="person-head"></div>
+					<div class="person-name">Newest</div>
+					<div class="person-piece">
+						<img height="20px" style="float: left;" src="pic/review.png">
+						<div class="review">@我的</div>
+					</div>
+					<div class="person-piece">
+						<img height="20px" style="float: left;" src="pic/like.png">
+						<div class="review">我的喜欢</div>
+					</div>
+					<div class="person-piece">
+						<img height="20px" style="float: left;" src="pic/setup.png">
+						<div class="review">我的设置</div>
+					</div>
+					<button id="log-out">注 销</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

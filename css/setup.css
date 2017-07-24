@@ -1,0 +1,60 @@
+#setup-content-main{
+	max-width: 100%;
+	padding: 20px 20px;
+	color: #333;
+	font-size: 14px;
+	height: auto;
+}
+.setup-container{
+	height: auto;
+	width: 100%;
+	padding: 10px 0;
+	overflow: hidden;
+}
+.sbi-l{
+	margin: 0;
+	width: 95px;
+	text-align: right;
+	margin-right: 23px;
+	float: left;
+	font-size: 14px;
+}
+.sbi-m{
+	float: left;
+	margin: 0;
+}
+.user-name{
+	padding: 0 4px;
+	width: 218px;
+	height: 26px;
+	border: 1px solid #ddd;
+	border-radius: 2px;
+	line-height: 26px;
+}
+.setup-tab{
+	padding:0 10%;
+	float: left;
+	cursor: pointer;	
+}
+#setup a{
+	width: auto;
+	height: auto;
+	padding: 0;
+}
+.sbi-m .search-button{
+	margin: 0 20px;
+	height: 100%;
+}
+.circle{
+	height: 200px;
+	width: 200px;
+	margin: 0 auto;
+	border-radius: 200px;
+	border: 1px solid #e5e9ef;
+	padding: 20px;
+}
+.circle img{
+	height: 100%;
+	width:100%;
+	border-radius: 100%;
+}
