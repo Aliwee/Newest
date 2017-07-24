@@ -43,7 +43,12 @@
 			<div id="index-head-inner">
 				<img style="height: 50px; float: left;" src="pic/title.png">
 				<ul id="index-head-nav">
-					<li><a href="index.html">新鲜事</a></li>
+					<li><a href="index.html">新鲜事</a>
+						<ul>
+							<li><a href="">发布</a></li>
+							<li><a href="">我的</a></li>
+						</ul>
+					</li>
 					<li><a href="">新闻</a>
 						<ul>
 							<li><a href="">科技</a></li>
@@ -58,7 +63,7 @@
 				<div class="search-bar">
 					<div id="popver">
 						<div id="search-bar-container">
-							<input id="search-bar-input" type="text" placeholder="搜索你感兴趣的内容" style="width: 265px;">
+							<input id="search-bar-input" type="text" placeholder="搜索你感兴趣的内容">
 							<button id="search-bar-button"></button>
 						</div>
 					</div>
@@ -72,6 +77,7 @@
 					<div id="content-main">
 						<ul id="ul-for-new">
 						</ul>
+						<div id="none">没有更多啦</div>
 					</div>
 				</div>
 			</div>
@@ -103,10 +109,11 @@
     	描述：全局变量
     -->
     <script>
-    	var u1 = "http://119.29.162.115:4567/post";
-    	var u2 = "http://119.29.162.115:4567/get-new-post";
-    	var u3 = "http://119.29.162.115:4567/like";
-    	var u4 = "specify.html?postId=";
+    	var u = "http://119.29.162.115:4567/";
+    	var u1 = u + "post";
+    	var u2 = u + "get-new-post";
+    	var u3 = u + "like";
+    	var u4 = "news.html?postId=";
     	var ajaxobj;
     	var list = 
     	'<li class="list-news">' +
@@ -114,7 +121,7 @@
     			'<div class="media-head"></div>' +
     			'<div class="media-name"></div>' +
 	    		'<div class="news-classify">'+
-	    			'<div class="review" style="margin-right:4px;">新鲜事</div>' +
+	    			'<div class="review" style="margin-right:4px;"></div>' +
 	    		'</div>' +
     		'</div>' +
     		'<div class="new-item-content">' +
@@ -134,7 +141,6 @@
     			'<div class="list-news-action-time"></div>' +
     		'</div>' +
     	'</li>';
-    	var empty = '<li>没有更多数据了</li>';
     	var canPost = false;
     </script>
     
@@ -154,12 +160,6 @@
 					post_id: dataId,
 					user_id: $.cookie('newestUserId'),
 					liked: +1
-				},
-				success: function(data){
-					ajaxobj = JSON.parse(data);
-					if(ajaxobj.isOk == true){
-						alert("OK");
-					}
 				}
 			});
 		}
@@ -173,12 +173,6 @@
 					post_id: dataId,
 					user_id: $.cookie('newestUserId'),
 					liked: -1
-				},
-				success: function(data){
-					ajaxobj = JSON.parse(data);
-					if(ajaxobj.isOk == true){
-						alert("OK");
-					}
 				}
 			});
 		}
@@ -214,7 +208,19 @@
     -->
     <script>
     	$("body").on("click","h3 a:first-child", function(){
-    		window.location.href = u4 + $(this).parent().parent().parent().data("postId");
+    		window.location.href = u4 + 
+    		$(this).parent().parent().parent().data("postId") + "=category=" +
+    		$(this).parent().parent().parent().data("category");
+    	});
+    	$("body").on("click",".new-item-content-inner", function(){
+    		window.location.href = u4 +
+    		$(this).parent().parent().data("postId") + "=category=" +
+    		$(this).parent().parent().parent().data("category");
+    	});
+    	$("body").on("click",".list-news-action-review", function(){
+    		window.location.href = u4 + 
+    		$(this).parent().parent().data("postId") + "=category=" +
+    		$(this).parent().parent().parent().data("category");
     	});
     </script>
     
@@ -226,7 +232,8 @@
     			async:true,
     			contentType: "application/x-www-form-urlencoded; charset=utf-8",
     			data:{
-    				user_id: $.cookie('newestUserId')
+    				user_id: $.cookie('newestUserId'),
+    				category: "新鲜事"
     			},
  				success:function(data){
  					ajaxobj = JSON.parse(data);
@@ -236,6 +243,7 @@
 		   					ajaxobj.posts[i].author_id,ajaxobj.posts[i].title,
 		   					ajaxobj.posts[i].content,ajaxobj.posts[i].time,
 		   					ajaxobj.posts[i].author_pic,
+		   					ajaxobj.posts[i].category,
 		   					ajaxobj.posts[i].isLiked,ajaxobj.posts[i].liked);
 						}
  					}
@@ -258,7 +266,8 @@
     			contentType: "application/x-www-form-urlencoded; charset=utf-8",
     			data:{
     				post_id: lastId,
-    				user_id: $.cookie('newestUserId')
+    				user_id: $.cookie('newestUserId'),
+    				category: "新鲜事"
     			},
  				success:function(data){
  					ajaxobj = JSON.parse(data);
@@ -270,11 +279,12 @@
 		   						ajaxobj.posts[i].author_id,ajaxobj.posts[i].title,
 		   						ajaxobj.posts[i].content,ajaxobj.posts[i].time,
 		   						ajaxobj.posts[i].author_pic,
+		   						ajaxobj.posts[i].category,
 		   						ajaxobj.posts[i].isLiked,ajaxobj.posts[i].liked);
 							}	
  						}
  						else{
- 							$("#ul-for-new").append(empty);
+ 							$("#none").show();
  						}
  					}
  				}
@@ -282,7 +292,7 @@
     	}
 
 		$(window).bind('scroll', function(){    //绑定滚动事件
-		    if($(document).scrollTop() + $(window).height() == $(document).height() && !canPost){
+		    if($(document).scrollTop() + $(window).height() >= $(document).height() && !canPost){
 				sendMorePost($("#ul-for-new li:last-child").data("postId"));
 				canPost = true;
 		    }
@@ -301,6 +311,7 @@
 			$("#myHeadPic").css("background-image","url("+$.cookie('newestUserPic')+")");
 			$("#myHeadPic").css("background-size","100px 100px");
 			sendPrePost();
+			$("#none").hide();
 		}
 	</script>
 	
@@ -336,14 +347,16 @@
     	描述：动态添加
     -->
     <script>
-    	function appendList(postId,authorName,authorId,title,content,time,author_pic,isLiked,liked){
+    	function appendList(postId,authorName,authorId,title,content,time,author_pic,category,isLiked,liked){
     		
     		$("#ul-for-new").append(list);
     		
     		$("#ul-for-new li:last-child").data("postId",postId);
+    		$("#ul-for-new li:last-child").data("category",category);
     		$("#ul-for-new li:last-child").children(".list-news-top").children(".media-head").css("background-image","url("+author_pic+")");
     		$("#ul-for-new li:last-child").children(".list-news-top").children(".media-head").css("background-size","26px 26px");
     		$("#ul-for-new li:last-child").children(".list-news-top").children(".media-name").html(authorName);
+      		$("#ul-for-new li:last-child").children(".list-news-top").children(".news-classify").children(".review").html(category);
     		$("#ul-for-new li:last-child").children(".new-item-content").children("h3").children("a").html(title);
     		$("#ul-for-new li:last-child").children(".new-item-content").children(".new-item-content-inner").html(content);
     		$("#ul-for-new li:last-child").children(".list-news-action").children(".list-news-action-like").children(".review").first().html(liked);

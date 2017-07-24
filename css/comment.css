@@ -39,6 +39,7 @@ a .hf-pl{
     height: 48px;
     overflow: hidden;
     margin-top: 5px;
+    border-radius: 48px;
 }
 .comment-show-con-list {
     width: 85%;
