@@ -32,7 +32,7 @@
     	描述：验证登录与加载用户数据
     -->
 	<script>
-		if(!$.cookie('newestUserId') &&  !$.cookie('newestUserName')){
+		if($.cookie('newestUserId')==null || $.cookie('newestUserName')==null){
 			window.location.href = "login-register.html";
 		}
 	</script>
@@ -221,9 +221,9 @@
     		$(this).parent().parent().parent().data("category");
     	});
     	$("body").on("click",".list-news-action-review", function(){
-    		window.location.href = "news.html#reviews?postId=" +
+    		window.location.href = u4 +
     		$(this).parent().parent().data("postId") + "=category=" +
-    		$(this).parent().parent().data("category");
+    		$(this).parent().parent().data("category") + "=reviews";
     	});
     </script>
     
