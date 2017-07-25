@@ -2,10 +2,12 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>review</title>
+	<title>newest</title>
 	<link rel="stylesheet" media="screen" href="css/index.css">
 	<link rel="stylesheet" type="text/css" href="font/font.css">
 	<link rel="stylesheet" type="text/css" href="css/review-list.css">
+	<script src="js/jquery-3.2.1.min.js"></script>
+	<script src="js/jquery.cookie.js"></script>	
 	<style>
 		.review{
 			float: left;
@@ -20,6 +22,16 @@
 			margin-left: 10px;
 		}
 	</style>
+	<!--
+    	作者：731275785@qq.com
+    	时间：2017-07-22
+    	描述：验证登录与加载用户数据
+    -->
+	<script>
+		if($.cookie('newestUserId')==null || $.cookie('newestUserName')==null){
+			window.location.href = "login-register.html";
+		}
+	</script>
 </head>
 <body>
 	<div id="index-container">
@@ -27,20 +39,21 @@
 			<div id="index-head-inner">
 				<a href="index.html"><img style="height: 50px; float: left;" src="pic/title.png"></a>
 				<ul id="index-head-nav">
-					<li><a href="">新鲜事</a>
+					<li><a href="index.html">新鲜事</a>
 						<ul>
-							<li><a href="">发布</a></li>
-							<li><a href="">我的</a></li>
+							<li><a href="publish-post.html">发布</a></li>
+							<li><a href="mypost.html">我的</a></li>
 						</ul>
 					</li>
-					<li><a href="">新闻</a>
+					<li><a>新闻</a>
 						<ul>
-							<li><a href="">科技</a></li>
-							<li><a href="">软件</a></li>
-							<li><a href="">游戏</a></li>
-							<li><a href="">影视</a></li>
-							<li><a href="">音乐</a></li>
-							<li><a href="">趣闻</a></li>
+							<li><a id="new-tech">要闻</a></li>
+							<li><a id="new-science">科学</a></li>
+							<li><a id="new-soft">软件</a></li>
+							<li><a id="new-game">游戏</a></li>
+							<li><a id="new-movie">影视</a></li>
+							<li><a id="new-comic">动漫</a></li>
+							<li><a id="new-funny">趣闻</a></li>
 						</ul>
 					</li>
 				</ul>
@@ -63,7 +76,7 @@
 				</div>
 				<div id="new-container">
 					<div id="review-list-content-main">
-						<ul>
+						<ul id="ul-for-new">
 							<li class="list-news">
 								<div class="review-user-head">
 									<img class="person-head" src="pic/header-img-comment_03.png">
@@ -81,7 +94,7 @@
 									</div>
 								</div>
 							</li>
-							<li class="list-news">
+							<!--<li class="list-news">
 								<div class="review-user-head">
 									<img class="person-head" src="pic/user-head.png">
 								</div>
@@ -97,31 +110,165 @@
 										<a href="" style="padding: 0;margin-right: 8px;">【ONE PIECE】海贼王20周年了！！！官方周年纪念视频</a>评论了你
 										</div>
 									</div>
-								</li>						</ul>
+								</li>						-->
+						</ul>
 							<div id="none">没有更多啦</div>
 						</div>
 					</div>
 				</div>
 			<div id="index-right">
 				<div id="right-container">
-					<div class="person-head"></div>
-					<div class="person-name">Newest</div>
+					<div class="person-head" id="myHeadPic"></div>
+					<div class="person-name" id="myName"></div>
 					<div class="person-piece">
 						<img height="20px" style="float: left;" src="pic/review.png">
-						<div class="review">@我的</div>
+						<div class="review" id="myReview">@我的</div>
 					</div>
 					<div class="person-piece">
-						<img height="20px" style="float: left;" src="pic/like.png">
-						<div class="review">我的喜欢</div>
+						<img id="myLikePic" height="20px" style="float: left;" src="pic/like.png">
+						<div id="myLike" class="review">我的喜欢</div>
 					</div>
 					<div class="person-piece">
 						<img height="20px" style="float: left;" src="pic/setup.png">
-						<div class="review">我的设置</div>
+						<div class="review" id="mySetting">我的设置</div>
 					</div>
 					<button id="log-out">注 销</button>
 				</div>
 			</div>
 		</div>
 	</div>
+	
+	<!--
+    	作者：731275785@qq.com
+    	时间：2017-07-21
+    	描述：全局变量
+    -->
+    <script>
+    	var u ="http://119.29.162.115:4567/";
+    	var u1 = u + "atme";
+    	var ajaxobj;
+    	var list = 
+    		'<li class="list-news">' +
+				'<div class="review-user-head">' +
+					'<img class="person-head">' +
+				'</div>' +
+				'<div class="review-right">' +
+					'<div class="review-right-top">' +
+						'<a style="padding: 0;"></a>' +
+						'<span></span>' +
+					'</div>' +
+					'<div class="review-right-middle">' +
+						'<a class="review-right-middle-content"></a>' +
+					'</div>' +
+					'<div class="review-right-bottom">' +
+						'<a style="padding: 0;margin-right: 8px;"></a>评论了你' +
+					'</div>' +
+				'</div>' +
+			'</li>'
+    	
+    </script>
+    
+    <!--
+    	作者：731275785@qq.com
+    	时间：2017-07-22
+    	描述：验证登录与加载用户数据
+    -->
+	<script>
+		function appendList(postId,fromId,content,date,fromName,fromPic,title){
+			$("#ul-for-new").append(list);
+			
+			$("#ul-for-new li:last-child").data("postId",postId);
+    		$("#ul-for-new li:last-child").data("fromId",fromId);
+    		$("#ul-for-new li:last-child").children(".review-user-head").children("img").attr("src",fromPic);
+    		$("#ul-for-new li:last-child").children(".review-right").children(".review-right-top").children("a").html(fromName);
+    		$("#ul-for-new li:last-child").children(".review-right").children(".review-right-top").children("span").html(date);
+    		$("#ul-for-new li:last-child").children(".review-right").children(".review-right-middle").children("a").html(content);
+    		$("#ul-for-new li:last-child").children(".review-right").children(".review-right-bottom").children("a").html(title);
+		}
+		function getAtMe(){
+			$.ajax({
+				type:"post",
+				url:u1,
+				async:true,
+				contentType: "application/x-www-form-urlencoded; charset=utf-8",
+				data:{
+					user_id: $.cookie('newestUserId'),
+					password: $.cookie('newestUserPassword')
+				},
+				success: function(data){
+					ajaxobj = JSON.parse(data);
+					if(ajaxobj.isOk == true){
+						for(var i=0; i<ajaxobj.atme.length; i++){
+							appendList(ajaxobj.atme[i].post_id,ajaxobj.atme[i].from_id,
+							ajaxobj.atme[i].content,ajaxobj.atme[i].date,
+							ajaxobj.atme[i].from_name,ajaxobj.atme[i].from_pic,
+							ajaxobj.atme[i].title);
+						}
+					}
+				}
+			});
+		}
+		if($.cookie('newestUserId') &&  $.cookie('newestUserName')){
+			$("#myName").html($.cookie('newestUserName'));
+			$("#myHeadPic").css("background-image","url("+$.cookie('newestUserPic')+")");
+			$("#myHeadPic").css("background-size","100px 100px");
+			getAtMe();
+		}
+	</script>
+	
+	<!--
+    	作者：731275785@qq.com
+    	时间：2017-07-22
+    	描述：注销
+    -->
+    <script>
+    	function logOut(){
+    		$.cookie('newestUserId', null, {
+            	expires : -1,
+	        });
+	        $.cookie('newestUserPassword', null, {
+	            expires : -1,
+	        });
+	        $.cookie('newestUserName',null, {
+	            expires : -1,
+	        });
+	        $.cookie('newestUserPic',null, {
+	            expires : -1,
+	        });
+    	}
+    	$("#log-out").click(function(){
+    		logOut();
+    		window.location.reload();
+    	})
+    </script>
+    
+    <!--
+    	作者：731275785@qq.com
+    	时间：2017-07-24
+    	描述：选择新闻种类
+    -->
+    <script>
+    	$("#new-funny").click(function(){
+    		window.location.href = "subnew.html?category=funny";
+    	});
+    	$("#new-game").click(function(){
+    		window.location.href = "subnew.html?category=game";
+    	});
+    	$("#new-movie").click(function(){
+    		window.location.href = "subnew.html?category=movie";
+    	});
+    	$("#new-comic").click(function(){
+    		window.location.href = "subnew.html?category=comic";
+    	});
+    	$("#new-soft").click(function(){
+    		window.location.href = "subnew.html?category=soft";
+    	});
+    	$("#new-tech").click(function(){
+    		window.location.href = "subnew.html?category=tech";
+    	});
+    	$("#new-science").click(function(){
+    		window.location.href = "subnew.html?category=science";
+    	})
+    </script>
 </body>
 </html>
