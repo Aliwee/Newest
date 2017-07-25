@@ -7,6 +7,7 @@
 	<link rel="stylesheet" type="text/css" href="font/font.css">
 	<script src="js/jquery-3.2.1.min.js"></script>
 	<script src="js/jquery.cookie.js"></script>
+	<script src="js/GlobalValue.js"></script>
 	<style>
 		.review{
 			float: left;
@@ -70,7 +71,6 @@
 					</div>
 				</div>
 				<button class="search-button">搜索</button>
-				<button class="search-button" style="padding-right:6px;">搜索用户</button>
 			</div>
 		</div>
 		<div style="padding: 0 16px;margin: 65px auto auto auto">
@@ -111,8 +111,10 @@
     	描述：全局变量
     -->
     <script>
-    	var u ="http://119.29.162.115:4567/";
+//  	var u ="http://119.29.162.115:4567/";
 //  	var u = "http://172.20.10.3:4567/";
+//		var u = "http://192.168.31.164:4567/";
+//		var u = "http://121.48.228.237:4567/";
     	var u1 = u + "post";
     	var u2 = u + "get-new-post";
     	var u3 = u + "like";
@@ -401,6 +403,31 @@
     	$("#new-science").click(function(){
     		window.location.href = "subnew.html?category=science";
     	})
+    </script>
+    
+    <!--
+    	作者：731275785@qq.com
+    	时间：2017-07-25
+    	描述：@我的
+    -->
+    <script>
+    	$("#myReview").click(function(){
+    		window.location.href = "review-list.html";
+    	});
+    </script>
+    
+    <!--
+    	作者：731275785@qq.com
+    	时间：2017-07-25
+    	描述：我的设置
+    -->
+    <script>
+    	$("#mySetting").click(function(){
+    		window.location.href = "setup.html";
+    	});
+    	$("#myLike").click(function(){
+    		window.location.href = "mylike.html";
+    	});
     </script>
 </body>
 </html>

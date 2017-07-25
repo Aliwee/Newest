@@ -216,12 +216,14 @@ a:hover{
 }
 h3{
 	line-height: 30px;
-	height: auto;
+	height: 30px;
 	margin: 0;
+	overflow: hidden;
 }
 h3 a{
 	color: #636363;
 	font-weight: bold;
+	overflow: hidden;
 }
 .new-item-content-inner{
 	margin-top: 9px;

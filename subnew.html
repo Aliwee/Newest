@@ -32,7 +32,7 @@
     	描述：验证登录与加载用户数据
     -->
 	<script>
-		if(!$.cookie('newestUserId') &&  !$.cookie('newestUserName')){
+		if($.cookie('newestUserId')==null || $.cookie('newestUserName')==null){
 			window.location.href = "login-register.html";
 		}
 	</script>
@@ -70,7 +70,6 @@
 					</div>
 				</div>
 				<button class="search-button">搜索</button>
-				<button class="search-button" style="padding-right:6px;">搜索用户</button>
 			</div>
 		</div>
 		<div style="padding: 0 16px;margin: 65px auto auto auto">
@@ -112,7 +111,8 @@
     -->
     <script>
 //  	var u = "http://172.20.10.3:4567/";
-		var u ="http://119.29.162.115:4567/";
+    	var u = "http://192.168.31.164:4567/";
+//		var u ="http://119.29.162.115:4567/";
     	var u1 = u + "post";
     	var u2 = u + "get-new-post";
     	var u3 = u + "like";
@@ -222,9 +222,9 @@
     		$(this).parent().parent().parent().data("category");
     	});
     	$("body").on("click",".list-news-action-review", function(){
-    		window.location.href = "news.html#reviews?postId=" +
+    		window.location.href = u4 +
     		$(this).parent().parent().data("postId") + "=category=" +
-    		$(this).parent().parent().data("category");
+    		$(this).parent().parent().data("category") + "=reviews";
     	});
     </script>
     
@@ -425,6 +425,30 @@
     	$("#new-science").click(function(){
     		window.location.href = "subnew.html?category=science";
     	})
+    </script>
+    <!--
+    	作者：731275785@qq.com
+    	时间：2017-07-25
+    	描述：@我的
+    -->
+    <script>
+    	$("#myReview").click(function(){
+    		window.location.href = "review-list.html";
+    	});
+    </script>
+    
+    <!--
+    	作者：731275785@qq.com
+    	时间：2017-07-25
+    	描述：我的设置
+    -->
+    <script>
+    	$("#mySetting").click(function(){
+    		window.location.href = "setup.html";
+    	});
+    	$("#myLike").click(function(){
+    		window.location.href = "mylike.html";
+    	});
     </script>
 </body>
 </html>

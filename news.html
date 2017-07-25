@@ -37,7 +37,7 @@
     	描述：验证登录与加载用户数据
     -->
 	<script>
-		if(!$.cookie('newestUserId') &&  !$.cookie('newestUserName')){
+		if($.cookie('newestUserId')==null || $.cookie('newestUserName')==null){
 			window.location.href = "login-register.html";
 		}
 	</script>
@@ -75,7 +75,6 @@
 					</div>
 				</div>
 				<button class="search-button">搜索</button>
-				<button class="search-button" style="padding-right:6px;">搜索用户</button>
 			</div>
 		</div>
 		<div style="padding: 0 16px;margin: 65px auto auto auto">
@@ -109,7 +108,7 @@
 				<div id="review-area">
 					<div class="commentAll">
 						<!--评论区域 begin-->
-						<div class="reviewArea clearfix">
+						<div class="reviewArea clearfix" id="reviews">
 							<textarea class="content comment-input" onkeyup="keyUP(this)" id="firstClassComment"></textarea>
 							<a href="javascript:;" class="plBtn">评论</a>
 						</div>
@@ -315,20 +314,22 @@
     -->
 	<script>
 //		var u = "http://172.20.10.3:4567/";
-		var u = "http://119.29.162.115:4567/";
+//		var u = "http://119.29.162.115:4567/";
+		var u = "http://192.168.31.164:4567/";
 		var u1 = u + "post-details";
 		var u2 = u + "like";
 		var u3 = u + "comment";
 		var u4 = u + "delete";
 		var postId = window.location.href.split("=")[1];
 		var categoryName = window.location.href.split("=")[3];
+		var reviews = window.location.href.split("=")[4];
 		var ajaxobj,contentVal;
 		var commentList =
 			'<div class="comment-show-con clearfix">' +
 				'<div class="comment-show-con-img pull-left">' +
 				'<img alt=""></div>' +
 				'<div class="comment-show-con-list pull-left clearfix">' +
-					'<a name="reviews"></a>' +
+//					'<a name="reviews"></a>' +
 					'<div class="pl-text clearfix">' +
 						'<a class="comment-size-name"></a>' +
 						'<span class="my-pl-con"></span>' +
@@ -536,6 +537,10 @@
 			$("#myHeadPic").css("background-image","url("+$.cookie('newestUserPic')+")");
 			$("#myHeadPic").css("background-size","100px 100px");
 			sendSpecifyPost(postId,categoryName);
+//			if(reviews == "reviews"){
+//				
+//				$("html,body").animate({scrollTop:$("#reviews").offset().top},1000);
+//			}
 		}
 		else{
 			window.location.href="index.html";
@@ -595,6 +600,30 @@
     	$("#new-science").click(function(){
     		window.location.href = "subnew.html?category=science";
     	})
+    </script>
+    <!--
+    	作者：731275785@qq.com
+    	时间：2017-07-25
+    	描述：@我的
+    -->
+    <script>
+    	$("#myReview").click(function(){
+    		window.location.href = "review-list.html";
+    	});
+    </script>
+    
+    <!--
+    	作者：731275785@qq.com
+    	时间：2017-07-25
+    	描述：我的设置
+    -->
+    <script>
+    	$("#mySetting").click(function(){
+    		window.location.href = "setup.html";
+    	});
+    	$("#myLike").click(function(){
+    		window.location.href = "mylike.html";
+    	});
     </script>
 </body>
 </html>

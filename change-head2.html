@@ -2,12 +2,22 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>setting</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="format-detection" content="telephone=no, email=no" />
+	<meta name="keywords" content="">
+	<meta name="description" content="">
+	<title>newest</title>
 	<link rel="stylesheet" media="screen" href="css/index.css">
 	<link rel="stylesheet" type="text/css" href="font/font.css">
 	<link rel="stylesheet" type="text/css" href="css/setup.css">
 	<script src="js/jquery-3.2.1.min.js"></script>
+	<script src="js/jquery.min.js"></script>	
 	<script src="js/jquery.cookie.js"></script>
+	<script src="js/iscroll-zoom.js"></script>
+	<script src="js/hammer.js"></script>
+	<script src="js/lrz.all.bundle.js"></script>
+	<script src="js/jquery.photoClip.js"></script>
 	<style>
 		.review{
 			float: left;
@@ -20,6 +30,20 @@
 			font-size: 14px;
 			line-height: 20px;
 			margin-left: 10px;
+		}
+		#clipArea {
+			margin: 20px;
+			height: 300px;
+		}
+		#file,
+		#clipBtn {
+			margin: 20px;
+		}
+		#view {
+			margin: 0 auto;
+			width: 200px;
+			height: 200px;
+			border-radius: 200px;
 		}
 	</style>
 	<!--
@@ -71,30 +95,17 @@
 		<div style="padding: 0 16px;margin: 65px auto auto auto">
 			<div id="new-content">
 				<div id="setup">
-					<div class="setup-tab" style="cursor: text;">我的信息</div>
-					<a href="change-head.html"><div class="setup-tab">我的头像</div></a>
+					<a href="setup.html"><div class="setup-tab">我的信息</div></a>
+					<div style="cursor:text;" class="setup-tab">我的头像</div>
 					<a href="change-password.html"><div class="setup-tab">修改密码</div></a>
 				</div>
 				<div id="new-container">
 					<div id="setup-content-main">
-						<div class="setup-container">
-							<p class="sbi-l">用户名:</p>
-							<div class="sbi-m">
-								<span><input class="user-name" type="text" id="newName"></span>
-							</div>
-							<div class="sbi-m">
-								<button class="search-button" id="changeName">保存</button>
-							</div>
-							<div class="sbi-m" style="height: 20px;line-height: 20px;">
-								<span style="color: #636363;font-size: 12px;color: #ED6452" id="nodify3">请输入用户名</span>
-							</div>
-						</div>
-						<div class="setup-container">
-							<p class="sbi-l">邮箱:</p>
-							<div class="sbi-m" style="height: 20px;line-height: 20px;">
-								<span style="color: #636363;" id="userId"></span>
-							</div>
-						</div>
+						<div id="clipArea"></div>
+						<input type="file" id="file" style="width: 300px;">
+						<button class="search-button" style=" margin: 20px;float: right;" id="clipBtn">完成</button>
+						<button id="clipBtnJQ" class="search-button" style="float: right;margin: 20px;">截取</button>
+						<div id="view"></div>
 					</div>
 				</div>
 			</div>
@@ -119,20 +130,15 @@
 			</div>
 		</div>
 	</div>
-	
-	<!--
-    	作者：731275785@qq.com
-    	时间：2017-07-22
-    	描述：验证登录与加载用户数据
-    -->
+	<input type="hidden" id="picBase"/>
+
 	<script>
 		if($.cookie('newestUserId') &&  $.cookie('newestUserName')){
 			$("#myName").html($.cookie('newestUserName'));
 			$("#myHeadPic").css("background-image","url("+$.cookie('newestUserPic')+")");
 			$("#myHeadPic").css("background-size","100px 100px");
-			$("#newName").val($.cookie('newestUserName'));
-			$("#userId").html($.cookie('newestUserId'));
-			$("#nodify3").hide();
+			$("#OriginHead").attr("src",$.cookie('newestUserPic'));
+			$("#file").val("");
 		}
 	</script>
 	
@@ -223,68 +229,74 @@
     -->
     <script>
 //  	var u ="http://119.29.162.115:4567/";
-//		var u ="http://172.20.10.3:4567/";
-		var u = "http://192.168.31.164:4567/";
-    	var u1 = u + "change-name";
-    	var ajaxobj;
+//  	var u = "http://172.20.10.3:4567/";
+//		var u = "http://192.168.31.164:4567/";
+		var u = "http://121.48.228.237:4567/";    
+		var u1 = "change-pic";
+		var ajaxobj;
+		var fileUploadControl;
+		var isAddPic = false;
     </script>
     
     <!--
     	作者：731275785@qq.com
     	时间：2017-07-25
-    	描述：修改用户名
+    	描述：上传图片
     -->
     <script>
-    	function reloadCookie(user){
-    		$.cookie('newestUserId',user.user_id,{
-				expires: 7,
-			});
-			$.cookie('newestUserName',user.user_name,{
-				expires: 7,
-			});
-			$.cookie('newestUserPassword',user.password,{
-				expires: 7,
-			});	
-			$.cookie('newestUserPic',user.pic,{
-				expires: 7,
-			});
+    	function checkAdd(){
+    		fileUploadControl = $("#file")[0];
+    		if (fileUploadControl.files.length < 0 || fileUploadControl.files.length == 0){
+				alert("请先添加照片路径!");
+				return;
+			}
+    		isAddPic = true;
     	}
-    	$("#changeName").click(function(){
-    		if($("#newName").val() != ""){
-    			$.ajax({
-    				type:"post",
-    				url:u1,
-    				async:true,
-    				contentType: "application/x-www-form-urlencoded; charset=utf-8",
-    				data:{
-    					user_id: $.cookie('newestUserId'),
-    					password: $.cookie('newestUserPassword'),
-    					new_user_name: $("#newName").val()
-    				},
-    				success: function(data){
-    					ajaxobj = JSON.parse(data);
-    					if(ajaxobj.isOk == true){
-    						logOut();
-    						reloadCookie(ajaxobj.user);
-    						$("#nodify3").html(ajaxobj.msg);
-    						window.location.reload();
-    					}
-    				}
-    			});
-    		}
-    		else{
-    			$("#nodify3").show();
-    		}
-    	});
-    	$("#newName").keyup(function(){
-    		if($("#newName").val() == ""){
-    			$("#nodify3").show();
-    		}
-    		else{
-    			$("#nodify3").hide();
+    	$("#clipBtn").click(function(){
+    		checkAdd();
+    		if(isAddPic){
+//				$.ajax({
+//					type:"post",
+//					url:u1,
+//					async:true,
+//					contentType: "application/x-www-form-urlencoded; charset=utf-8",
+//					data:{
+//						
+//					},
+//					success:function(data){
+//						ajaxobj = JSON.parse(data);
+//						if(ajaxobj.isOk == true){
+//							$.cookie('newestUserPic',null, {
+//	            				expires : -1,
+//	        				});
+//	        				$.cookie('newestUserPic',ajaxobj., {
+//	            				expires : 7,
+//	        				});
+//	        				window.location.reload();
+//						}
+//					}
+//				});
     		}
     	});
-    </script>
-    
+		
+		var clipArea = new bjj.PhotoClip("#clipArea", {
+			size: [260, 260],
+			outputSize: [640, 640],
+			file: "#file",
+			view: "#view",
+			ok: "#clipBtnJQ",
+			loadStart: function() {
+				console.log("照片读取中");
+			},
+			loadComplete: function() {
+				console.log("照片读取完成");
+			},
+			clipFinish: function(dataURL) {
+				console.log(dataURL);
+				$("#picBase").val(dataURL);
+			}
+		});
+		
+	</script>
 </body>
 </html>

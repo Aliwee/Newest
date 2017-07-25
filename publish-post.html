@@ -28,7 +28,7 @@
     	描述：验证登录与加载用户数据
     -->
 	<script>
-		if(!$.cookie('newestUserId') &&  !$.cookie('newestUserName')){
+		if($.cookie('newestUserId')==null || $.cookie('newestUserName')==null){
 			window.location.href = "login-register.html";
 		}
 	</script>
@@ -66,7 +66,6 @@
 					</div>
 				</div>
 				<button class="search-button">搜索</button>
-				<button class="search-button" style="padding-right:6px;">搜索用户</button>
 			</div>
 		</div>
 		<div style="padding: 0 16px;margin: 65px auto auto auto">
@@ -78,7 +77,7 @@
 							<textarea maxlength="30" class="person-new-subtitle-container" style="height: 100%" placeholder="新鲜事标题（限30字）" id="title"></textarea>
 						</div>
 						<div class="person-new-subtitle" style="height: 200px;">
-							<textarea class="person-new-subtitle-container" placeholder="详细信息(若有图片，请使用markdown语法上传)" style="height: 100%;overflow: auto;" id="content"></textarea>
+							<textarea class="person-new-subtitle-container" placeholder="新鲜事内容(本网站支持Markdown语法)" style="height: 100%;overflow: auto;" id="content"></textarea>
 						</div>
 						<p id="nodify" style="color: #ed2470;"></p>
 						<input id="submit-person-news" type="submit" value="发布新鲜事" >
@@ -99,7 +98,7 @@
 					</div>
 					<div class="person-piece">
 						<img height="20px" style="float: left;" src="pic/setup.png">
-						<div class="review" id="mySetting">设置</div>
+						<div class="review" id="mySetting">我的设置</div>
 					</div>
 					<button id="log-out">注 销</button>
 				</div>
@@ -113,7 +112,9 @@
     	描述：全局变量
     -->
     <script>
-    	var u = "http://119.29.162.115:4567/";
+//  	var u = "http://119.29.162.115:4567/";
+//  	var u = "http://172.20.10.3:4567/";
+    	var u = "http://192.168.31.164:4567/";
     	var u1 = u + "make-new-post";
     	var canPost = false;
     	var ajaxobj;
@@ -242,6 +243,30 @@
     	$("#new-science").click(function(){
     		window.location.href = "subnew.html?category=science";
     	})
+    </script>
+    <!--
+    	作者：731275785@qq.com
+    	时间：2017-07-25
+    	描述：@我的
+    -->
+    <script>
+    	$("#myReview").click(function(){
+    		window.location.href = "review-list.html";
+    	});
+    </script>
+    
+    <!--
+    	作者：731275785@qq.com
+    	时间：2017-07-25
+    	描述：我的设置
+    -->
+    <script>
+    	$("#mySetting").click(function(){
+    		window.location.href = "setup.html";
+    	});
+    	$("#myLike").click(function(){
+    		window.location.href = "mylike.html";
+    	});
     </script>
 </body>
 </html>

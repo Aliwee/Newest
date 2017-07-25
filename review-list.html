@@ -66,7 +66,6 @@
 					</div>
 				</div>
 				<button class="search-button">搜索</button>
-				<button class="search-button" style="padding-right:6px;">搜索用户</button>
 			</div>
 		</div>
 		<div style="padding: 0 16px;margin: 65px auto auto auto">
@@ -110,8 +109,9 @@
     	描述：全局变量
     -->
     <script>
-    	var u ="http://119.29.162.115:4567/";
+//  	var u ="http://119.29.162.115:4567/";
 //		var u = "http://172.20.10.3:4567/";
+		var u = "http://192.168.31.164:4567/";
     	var u1 = u + "atme";
     	var ajaxobj;
     	var list = 
@@ -150,11 +150,12 @@
     	描述：验证登录与加载用户数据
     -->
 	<script>
-		function appendList(postId,fromId,content,date,fromName,fromPic,title){
+		function appendList(postId,fromId,content,date,fromName,fromPic,title,category){
 			$("#ul-for-new").append(list);
 			
 			$("#ul-for-new li:last-child").data("postId",postId);
     		$("#ul-for-new li:last-child").data("fromId",fromId);
+    		$("#ul-for-new li:last-child").data("category",category);
     		$("#ul-for-new li:last-child").children(".review-user-head").children("img").attr("src",fromPic);
     		$("#ul-for-new li:last-child").children(".review-right").children(".review-right-top").children("a").html(fromName);
     		$("#ul-for-new li:last-child").children(".review-right").children(".review-right-top").children("span").html(date);
@@ -178,7 +179,7 @@
 							appendList(ajaxobj.atme[i].post_id,ajaxobj.atme[i].from_id,
 							ajaxobj.atme[i].content,ajaxobj.atme[i].date,
 							ajaxobj.atme[i].from_name,ajaxobj.atme[i].from_pic,
-							ajaxobj.atme[i].title);
+							ajaxobj.atme[i].title,ajaxobj.atme[i].category);
 						}
 					}
 				}
@@ -245,6 +246,31 @@
     	$("#new-science").click(function(){
     		window.location.href = "subnew.html?category=science";
     	})
+    </script>
+    
+    <!--
+    	作者：731275785@qq.com
+    	时间：2017-07-25
+    	描述：@我的
+    -->
+    <script>
+    	$("#myReview").click(function(){
+    		window.location.reload();
+    	});
+    </script>
+    
+    <!--
+    	作者：731275785@qq.com
+    	时间：2017-07-25
+    	描述：我的设置
+    -->
+    <script>
+    	$("#mySetting").click(function(){
+    		window.location.href = "setup.html";
+    	});
+    	$("#myLike").click(function(){
+    		window.location.href = "mylike.html";
+    	});
     </script>
 </body>
 </html>
