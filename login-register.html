@@ -10,6 +10,7 @@
   <link rel="stylesheet" type="text/css" href="font/font.css">
   <script src="js/jquery-3.2.1.min.js"></script>
   <script src="js/jquery.cookie.js"></script>
+  <script src="js/GlobalValue.js"></script>
 </head>
 <body>
 
@@ -40,7 +41,7 @@
 							<input id="login-buttom" type="submit" class="button" value="登 录">
 						</div>
 						<div class="foot-lnk">
-							<a href="#forgot">忘记密码?</a>
+							<a href="forget-password.html">忘记密码?</a>
 						</div>
 					</div>
 					<div class="sign-up-htm">
@@ -93,19 +94,23 @@
 	<script>
 		var countdown=60; 
 	  	function settime(obj) {
-	  		if (countdown == 0) {
-	  			obj.removeAttribute("disabled");
-	  			obj.value = "获取验证码";
-	  			countdown = 60;
-	  			return;
-	  		} else {
-	  			obj.setAttribute("disabled", true);
-	  			obj.value = "重新发送(" + countdown + ")";
-	  			countdown--;
+	  		checkPostVe();
+	  		
+	  		if(canPost3){
+	  			if (countdown == 0) {
+		  			obj.removeAttribute("disabled");
+		  			obj.value = "获取验证码";
+		  			countdown = 60;
+		  			return;
+		  		} else {
+		  			obj.setAttribute("disabled", true);
+		  			obj.value = "重新发送(" + countdown + ")";
+		  			countdown--;
+		  		}
+		  		setTimeout(function() {
+		  			settime(obj)
+		  		}, 1000)
 	  		}
-	  		setTimeout(function() {
-	  			settime(obj)
-	  		}, 1000)
 	  	}
 	</script>
 
@@ -115,9 +120,6 @@
 	描述：全局变量
 -->
 <script>
-//	var u = "http://172.20.10.3:4567/";
-//	var u ="http://119.29.162.115:4567/";
-	var u = "http://121.48.228.237:4567/";
 	var u1 = u + "login";
 	var u2 = u + "register-1";
 	var u3 = u + "register-2";
@@ -222,6 +224,12 @@
 					if(ajaxobj.isOk==true)
             {
                 alert(ajaxobj.msg);
+//              $.cookie('newestUserId',ajaxobj.user.user_id,{
+//									expires: 7,
+//								});
+//								$.cookie('newestUserId',ajaxobj.user.user_name,{
+//									expires: 7,
+//								});
                 $("label").attr("for","tab-1");
             }
 				}
@@ -322,38 +330,7 @@
 	描述：登录
 -->
 <script>
-	function checkPostLo(){
-		var user = $("#user").val();
-		var pass = $("#pass").val();
-		
-		if(user == ""){
-			$("#nodify1").html("请输入邮箱号");
-			return;
-		}
-		else{
-			$("#nodify1").html("");
-		}
-		if(pass == ""){
-			$("#nodify1").html("请输入密码");
-			return;
-		}
-		else{
-			$("#nodify1").html("");
-		}
-		
-		canPost2 = true;
-	}
-	
-	$("#user").keyup(function(){
-		checkPostLo();
-	});
-	$("#pass").keyup(function(){
-		checkPostLo();
-	});
-	
-	$("#login-buttom").click(function(){
-		checkPostLo();
-		if(canPost2){
+	function logIn(){
 			$.ajax({
 				type:"post",
 				url:u1,
@@ -389,6 +366,57 @@
 					}
 				}
 			});
+	}
+	function checkPostLo(){
+		var user = $("#user").val();
+		var pass = $("#pass").val();
+		
+		if(user == ""){
+			$("#nodify1").html("请输入邮箱号");
+			return;
+		}
+		else{
+			$("#nodify1").html("");
+		}
+		if(pass == ""){
+			$("#nodify1").html("请输入密码");
+			return;
+		}
+		else{
+			$("#nodify1").html("");
+		}
+		
+		canPost2 = true;
+	}
+	
+	$("#user").keyup(function(){
+		checkPostLo();
+	});
+	$("#pass").keyup(function(){
+		checkPostLo();
+	});
+	$("#user").keyup(function(e){
+		if (e.keyCode === 13) {
+			checkPostLo();
+			if(canPost2){
+				logIn();
+			}
+		}
+	});
+	$("#pass").keyup(function(e){
+		if (e.keyCode === 13) {
+			checkPostLo();
+			if(canPost2){
+				logIn();
+			}
+		}
+	});
+	
+	
+	$("#login-buttom").click(function(){
+		checkPostLo();
+		if(canPost2){
+			logIn();
 		}
 	});
 </script>

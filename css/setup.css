@@ -58,3 +58,47 @@
 	width:100%;
 	border-radius: 100%;
 }
+.ih-item{           
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
+    } 
+
+.ih-item .img img{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    } 
+
+.ih-item .info {
+position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    -webkit-backface-visibility: hidden;/* 隐藏旋转元素的背面*/
+    backface-visibility: hidden;
+    background: rgba(0, 0, 0, 0.6);   /*后面这个0.6是指的背景的透明度*/
+    opacity: 0;
+    -webkit-transition: all 0.35s ease-in-out;   /*规定提示信息怎样出现ease-in-out以慢速度开始和结束*/
+    -moz-transition: all 0.35s ease-in-out;
+    transition: all 0.35s ease-in-out;
+    border-radius: 100%;
+    line-height: 200px;
+}
+
+.ih-item a:hover .info {
+    opacity: 1;    /*有opacity有0变成1*/            
+}
+.info h3{
+	line-height: 200px;
+	height: auto;
+}
+.ih-item a{
+	padding: 0;
+	height: auto;
+	width: auto;
+}

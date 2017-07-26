@@ -18,6 +18,7 @@
 	<script src="js/hammer.js"></script>
 	<script src="js/lrz.all.bundle.js"></script>
 	<script src="js/jquery.photoClip.js"></script>
+	<script src="js/GlobalValue.js"></script>
 	<style>
 		.review{
 			float: left;
@@ -89,7 +90,7 @@
 						</div>
 					</div>
 				</div>
-				<button class="search-button">搜索</button>
+				<button class="search-button" id="search">搜索</button>
 			</div>
 		</div>
 		<div style="padding: 0 16px;margin: 65px auto auto auto">
@@ -139,6 +140,7 @@
 			$("#myHeadPic").css("background-size","100px 100px");
 			$("#OriginHead").attr("src",$.cookie('newestUserPic'));
 			$("#file").val("");
+			$("#picBase").val("");
 		}
 	</script>
 	
@@ -149,9 +151,6 @@
     -->
     <script>
     	function logOut(){
-    		$.cookie('newestUserId', null, {
-            	expires : -1,
-	        });
 	        $.cookie('newestUserPassword', null, {
 	            expires : -1,
 	        });
@@ -227,12 +226,8 @@
     	时间：2017-07-25
     	描述：全局变量
     -->
-    <script>
-//  	var u ="http://119.29.162.115:4567/";
-//  	var u = "http://172.20.10.3:4567/";
-//		var u = "http://192.168.31.164:4567/";
-		var u = "http://121.48.228.237:4567/";    
-		var u1 = "change-pic";
+    <script>  
+		var u1 = u + "change-pic";
 		var ajaxobj;
 		var fileUploadControl;
 		var isAddPic = false;
@@ -255,27 +250,34 @@
     	$("#clipBtn").click(function(){
     		checkAdd();
     		if(isAddPic){
-//				$.ajax({
-//					type:"post",
-//					url:u1,
-//					async:true,
-//					contentType: "application/x-www-form-urlencoded; charset=utf-8",
-//					data:{
-//						
-//					},
-//					success:function(data){
-//						ajaxobj = JSON.parse(data);
-//						if(ajaxobj.isOk == true){
-//							$.cookie('newestUserPic',null, {
-//	            				expires : -1,
-//	        				});
-//	        				$.cookie('newestUserPic',ajaxobj., {
-//	            				expires : 7,
-//	        				});
-//	        				window.location.reload();
-//						}
-//					}
-//				});
+				$.ajax({
+					type:"post",
+					url:u1,
+					async:true,
+					contentType: "application/x-www-form-urlencoded; charset=utf-8",
+					data:{
+						user_id: $.cookie('newestUserId'),
+						pic: $("#picBase").val()
+					},
+					success:function(data){
+						ajaxobj = JSON.parse(data);
+						if(ajaxobj.isOk == true){
+							$.cookie('newestUserPic',null, {
+	            				expires : -1,
+	        				});
+	        				$.cookie('newestUserPic',ajaxobj.user.pic, {
+	            				expires : 7,
+	        				});
+	        				window.location.reload();
+						}
+					},
+					error: function(XMLHttpRequest, textStatus, errorThrown) {
+						 alert(XMLHttpRequest.status);
+						 alert(XMLHttpRequest.readyState);
+						 alert(textStatus);
+					}
+					
+				});
     		}
     	});
 		
@@ -298,5 +300,18 @@
 		});
 		
 	</script>
+	
+	<!--
+    	作者：731275785@qq.com
+    	时间：2017-07-26
+    	描述：搜索
+    -->
+    <script>
+    	$("#search").click(function(){
+    		if($("#search-bar-input").val() != ""){
+    			window.location.href = "search-user.html?keyword=" + $("#search-bar-input").val();
+    		}
+    	});
+    </script>
 </body>
 </html>

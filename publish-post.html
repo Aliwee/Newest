@@ -8,6 +8,7 @@
 	<link rel="stylesheet" type="text/css" href="css/person-news.css">
 	<script src="js/jquery-3.2.1.min.js"></script>
 	<script src="js/jquery.cookie.js"></script>
+	<script src="js/GlobalValue.js"></script>
 	<style>
 		.review{
 			float: left;
@@ -65,7 +66,7 @@
 						</div>
 					</div>
 				</div>
-				<button class="search-button">搜索</button>
+				<button class="search-button" id="search">搜索</button>
 			</div>
 		</div>
 		<div style="padding: 0 16px;margin: 65px auto auto auto">
@@ -112,9 +113,6 @@
     	描述：全局变量
     -->
     <script>
-//  	var u = "http://119.29.162.115:4567/";
-//  	var u = "http://172.20.10.3:4567/";
-    	var u = "http://192.168.31.164:4567/";
     	var u1 = u + "make-new-post";
     	var canPost = false;
     	var ajaxobj;
@@ -140,7 +138,7 @@
     			success:function(data){
     				ajaxobj = JSON.parse(data);
     				if(ajaxobj.isOk == true){
-    					window.location.href = "index.html";
+    					window.location.href = "mypost.html";
     				}
     				else{
     					$("#nodify").html(ajaxobj.msg);
@@ -197,9 +195,9 @@
     -->
     <script>
     	function logOut(){
-    		$.cookie('newestUserId', null, {
-            	expires : -1,
-	        });
+//  		$.cookie('newestUserId', null, {
+//          	expires : -1,
+//	        });
 	        $.cookie('newestUserPassword', null, {
 	            expires : -1,
 	        });
@@ -266,6 +264,19 @@
     	});
     	$("#myLike").click(function(){
     		window.location.href = "mylike.html";
+    	});
+    </script>
+    
+    <!--
+    	作者：731275785@qq.com
+    	时间：2017-07-26
+    	描述：搜索
+    -->
+    <script>
+    	$("#search").click(function(){
+    		if($("#search-bar-input").val() != ""){
+    			window.location.href = "search-user.html?keyword=" + $("#search-bar-input").val();
+    		}
     	});
     </script>
 </body>
