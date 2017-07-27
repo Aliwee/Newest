@@ -79,6 +79,7 @@
 					<div id="content-main">
 						<ul id="ul-for-new">
 						</ul>
+						<div id="load">加载中</div>
 						<div id="none">没有更多啦</div>
 					</div>
 				</div>
@@ -285,6 +286,7 @@
 							}	
  						}
  						else{
+ 							$("#load").hide();
  							$("#none").show();
  						}
  					}
@@ -296,6 +298,7 @@
 		    if($(document).scrollTop() + $(window).height() >= $(document).height() && !canPost){
 				sendMorePost($("#ul-for-new li:last-child").data("postId"));
 				canPost = true;
+				$("#load").show();
 		    }
 		});    
     	
@@ -313,6 +316,7 @@
 			$("#myHeadPic").css("background-size","100px 100px");
 			sendPrePost();
 			$("#none").hide();
+			$("#load").hide();
 		}
 	</script>
 	

@@ -224,13 +224,7 @@
 					if(ajaxobj.isOk==true)
             {
                 alert(ajaxobj.msg);
-//              $.cookie('newestUserId',ajaxobj.user.user_id,{
-//									expires: 7,
-//								});
-//								$.cookie('newestUserId',ajaxobj.user.user_name,{
-//									expires: 7,
-//								});
-                $("label").attr("for","tab-1");
+								$("input:radio[name='tab']").eq(0).prop("checked",true); 
             }
 				}
 			});
@@ -266,7 +260,6 @@
 			$("#nodify2").html("请核对两次输入的密码");
 			return;
 		}
-		$("#nodify2").html("验证码已发送至你的邮箱");
 		canPost3 = true;		
 	}
 	
@@ -290,6 +283,7 @@
             }
           else{
           	$("#email-address").data("verify",{first:ajaxobj.msg});
+          	$("#nodify2").html("验证码已发送至你的邮箱");
           	sendEmail = true;
           }
 				}
@@ -338,7 +332,7 @@
 				contentType: "application/x-www-form-urlencoded; charset=utf-8",
 				data:{
 					user_id: $("#user").val(),
-					password: $("#pass").val()
+					password: $("#pass").val(),
 				},
 				success:function(data){
 					ajaxobj = JSON.parse(data);

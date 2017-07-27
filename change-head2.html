@@ -245,6 +245,7 @@
 				alert("请先添加照片路径!");
 				return;
 			}
+    		$("#clipBtn").html("上传中...");
     		isAddPic = true;
     	}
     	$("#clipBtn").click(function(){
@@ -268,6 +269,7 @@
 	        				$.cookie('newestUserPic',ajaxobj.user.pic, {
 	            				expires : 7,
 	        				});
+	        				alert("上传成功!");
 	        				window.location.reload();
 						}
 					},
