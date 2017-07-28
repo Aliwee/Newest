@@ -12,9 +12,9 @@ For clients ***how to enjoy this website***, see the user manual below.
 
 *The website now is shown in Chinese only, so it will be more enjoyable if you know some Chinese.*
 
-To access the website, go to: http://165.227.15.252/index.html
+To access the website, go to: [Newest](http://119.29.162.115:8080/index.html)
 
-If you haven't registered, the website will automatically redirect to: http://165.227.15.252/login-register.html 
+If you haven't registered, the website will automatically redirect to: [Newest Login](http://119.29.162.115:8080/login-register.html)
 
 ##### Registration
 
